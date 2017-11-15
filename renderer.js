@@ -16,13 +16,9 @@ const selectDataBtn = document.getElementById('select-data')
 const selectOutputBtn = document.getElementById('select-output')
 const generateBtn = document.getElementById('generate')
 
-let templatePath = store.get('template');
-let dataPath = store.get('data');
-let outputPath = store.get('output');
-
-document.getElementById('template').value = templatePath === undefined ? "" : templatePath;
-document.getElementById('data').value = dataPath === undefined ? "" : dataPath;
-document.getElementById('output').value = outputPath === undefined ? "" : outputPath;
+document.getElementById('template').value = store.get('template', '');
+document.getElementById('data').value = store.get('data', '');
+document.getElementById('output').value = store.get('output', '');
 
 function resetLog () {
   document.getElementById('info').innerHTML = '';
@@ -37,9 +33,7 @@ selectTemplateBtn.addEventListener('click', function (event) {
 })
 
 ipc.on('selected-template-file', function (event, path) {
-  templatePath = path[0];
-  store.set('template', templatePath);
-  document.getElementById('template').value = templatePath;
+  document.getElementById('template').value = path[0];
 })
 
 selectDataBtn.addEventListener('click', function (event) {
@@ -47,9 +41,7 @@ selectDataBtn.addEventListener('click', function (event) {
 })
 
 ipc.on('selected-data-file', function (event, path) {
-  dataPath = path[0];
-  store.set('data', dataPath);
-  document.getElementById('data').value = dataPath;
+  document.getElementById('data').value = path[0];
 })
 
 selectOutputBtn.addEventListener('click', function (event) {
@@ -57,14 +49,25 @@ selectOutputBtn.addEventListener('click', function (event) {
 })
 
 ipc.on('selected-output-folder', function (event, path) {
-  outputPath = path[0];
-  store.set('output', outputPath);
-  document.getElementById('output').value = outputPath;
+  document.getElementById('output').value = path[0];
 })
 
 generateBtn.addEventListener('click', function (event) {
   try {
     resetLog();
+    var templatePath = document.getElementById('template').value
+    var dataPath = document.getElementById('data').value
+    var outputPath = document.getElementById('output').value
+
+    store.set('template', templatePath);
+    store.set('data', dataPath);
+    store.set('output', outputPath);
+
+    if (templatePath === "" || dataPath === "" || outputPath === "") {
+      log("Ne visi laukai užpildyti");
+      return;
+    }
+
     log('Generate clicked. Trying to read: ' + dataPath);
     var data = XLSX.readFile(dataPath);
   
