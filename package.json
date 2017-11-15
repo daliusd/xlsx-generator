@@ -1,0 +1,32 @@
+{
+  "name": "xlsx-generator",
+  "version": "1.0.0",
+  "description": "XLSX Generator",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "Dalius Dobravolskas",
+  "license": "MIT",
+  "dependencies": {
+    "xlsx": "*",
+    "xlsx-template": "*"
+  },
+  "devDependencies": {
+    "electron": "~1.7.8",
+    "electron-builder": "^19.42.1"
+  },
+  "build": {
+    "appId": "lt.ffff.xlsxgenerator"
+  }
+}

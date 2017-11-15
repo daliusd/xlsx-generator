@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>XLSX generatorius</title>
+  </head>
+  <body>
+    <p>
+      <input id="template" type="text" name="template" value="" placeholder="Šablonas"/>
+      <input id="select-template" type="button" value="Pasirinkti"/>
+    </p>
+    <p>
+      <input id="data" type="text" name="data" value="" placeholder="Duomenys"/>
+      <input id="select-data" type="button" value="Pasirinkti"/>
+    </p>
+    <p>
+      <input id="output" type="text" name="output" value="" placeholder="Rezultatų aplankas"/>
+      <input id="select-output" type="button" value="Pasirinkti"/>
+    </p>
+    <p>
+      <input id="generate" type="button" value="Generuoti"/>
+    </p>
+    <p id="info"></p>
+    <script>
+      require('./renderer.js')
+    </script>
+  </body>
+</html>
