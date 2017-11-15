@@ -7,6 +7,7 @@ var XlsxTemplate = require('xlsx-template');
 const ipc = require('electron').ipcRenderer
 const path = require('path')
 const fs = require('fs');
+const capitalize = require('capitalize')
 const numberToLTstr = require('./numberToLTstr');
 
 const Store = require('electron-store');
@@ -88,7 +89,7 @@ generateBtn.addEventListener('click', function (event) {
         if (key.indexOf(',') !== -1) {
           var s = key.split(',');
           if (s[1] == "toltstr") {
-            inputData[idx][key] = numberToLTstr.numberToLTstr(parseFloat(inputData[idx][key]));
+            inputData[idx][key] = capitalize(numberToLTstr.numberToLTstr(parseFloat(inputData[idx][key])));
           }
         }
       }
