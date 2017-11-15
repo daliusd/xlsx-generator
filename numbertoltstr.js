@@ -56,7 +56,7 @@ function getNumberToStrHundredsPart (number) {
   return getNumberAsStr(remaining);
 }
 
-exports.numberToLTstr = function (number) {
+module.exports = function (number) {
   let result = '';
   let cents = number * 100 % 100;
   let intNumber = Math.trunc (number);
