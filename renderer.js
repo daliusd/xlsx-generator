@@ -7,6 +7,7 @@ var XlsxTemplate = require('xlsx-template');
 const ipc = require('electron').ipcRenderer
 const path = require('path')
 const fs = require('fs');
+const numberToLTstr = require('./numberToLTstr');
 
 const Store = require('electron-store');
 const store = new Store();
@@ -83,8 +84,16 @@ generateBtn.addEventListener('click', function (event) {
     log('Template read');
     
     for (var idx = 0; idx < inputData.length; idx++) {
+      for (var key in inputData[idx]) {
+        if (key.indexOf(',') !== -1) {
+          var s = key.split(',');
+          if (s[1] == "toltstr") {
+            inputData[idx][key] = numberToLTstr.numberToLTstr(parseFloat(inputData[idx][key]));
+          }
+        }
+      }
       log('Substituting data: ' + JSON.stringify(inputData[idx]));
-      
+
       var template = new XlsxTemplate(templateData);
       template.substitute(firstTemplateSheet, inputData[idx]);
   
