@@ -19,6 +19,7 @@
   "author": "Dalius Dobravolskas",
   "license": "MIT",
   "dependencies": {
+    "electron-store": "*",
     "xlsx": "*",
     "xlsx-template": "*"
   },

@@ -8,14 +8,21 @@ const ipc = require('electron').ipcRenderer
 const path = require('path')
 const fs = require('fs');
 
+const Store = require('electron-store');
+const store = new Store();
+
 const selectTemplateBtn = document.getElementById('select-template')
 const selectDataBtn = document.getElementById('select-data')
 const selectOutputBtn = document.getElementById('select-output')
 const generateBtn = document.getElementById('generate')
 
-let templatePath
-let dataPath
-let outputPath
+let templatePath = store.get('template');
+let dataPath = store.get('data');
+let outputPath = store.get('output');
+
+document.getElementById('template').value = templatePath === undefined ? "" : templatePath;
+document.getElementById('data').value = dataPath === undefined ? "" : dataPath;
+document.getElementById('output').value = outputPath === undefined ? "" : outputPath;
 
 selectTemplateBtn.addEventListener('click', function (event) {
   ipc.send('open-file-dialog-for-template');
@@ -23,6 +30,7 @@ selectTemplateBtn.addEventListener('click', function (event) {
 
 ipc.on('selected-template-file', function (event, path) {
   templatePath = path[0];
+  store.set('template', templatePath);
   document.getElementById('template').value = templatePath;
 })
 
@@ -32,6 +40,7 @@ selectDataBtn.addEventListener('click', function (event) {
 
 ipc.on('selected-data-file', function (event, path) {
   dataPath = path[0];
+  store.set('data', dataPath);
   document.getElementById('data').value = dataPath;
 })
 
@@ -41,6 +50,7 @@ selectOutputBtn.addEventListener('click', function (event) {
 
 ipc.on('selected-output-folder', function (event, path) {
   outputPath = path[0];
+  store.set('output', outputPath);
   document.getElementById('output').value = outputPath;
 })
 
