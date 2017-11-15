@@ -24,6 +24,14 @@ document.getElementById('template').value = templatePath === undefined ? "" : te
 document.getElementById('data').value = dataPath === undefined ? "" : dataPath;
 document.getElementById('output').value = outputPath === undefined ? "" : outputPath;
 
+function resetLog () {
+  document.getElementById('info').innerHTML = '';
+}
+
+function log(text) {
+  document.getElementById('info').innerHTML += text + "<br/>";
+}
+
 selectTemplateBtn.addEventListener('click', function (event) {
   ipc.send('open-file-dialog-for-template');
 })
@@ -55,29 +63,38 @@ ipc.on('selected-output-folder', function (event, path) {
 })
 
 generateBtn.addEventListener('click', function (event) {
-  document.getElementById('info').innerHTML = 'Generate clicked. Trying to read: ' + dataPath;
-  var data = XLSX.readFile(dataPath);
-
-  var firstSheet = data.SheetNames[0];
-  var worksheet = data.Sheets[firstSheet];
-  var inputData = XLSX.utils.sheet_to_json (worksheet);
-
-  document.getElementById('info').innerHTML = 'Reading template from: ' + templatePath;
-  var templateData = fs.readFileSync (templatePath);
-  document.getElementById('info').innerHTML = 'Template read';
+  try {
+    resetLog();
+    log('Generate clicked. Trying to read: ' + dataPath);
+    var data = XLSX.readFile(dataPath);
   
-  for (var idx = 0; idx < inputData.length; idx++) {
-    document.getElementById('info').innerHTML = 'Substituting data: ' + JSON.stringify(inputData[idx]);
-    
-    var template = new XlsxTemplate(templateData);
-    template.substitute('VU', inputData[idx]);
-
-    document.getElementById('info').innerHTML = 'Generating output from template';
-    var outData = template.generate();
-    
-    var outputFile = path.join(outputPath, idx.toString() + ".xlsx");
-    document.getElementById('info').innerHTML = 'Writing file: ' + outputFile;
+    var firstSheet = data.SheetNames[0];
+    var worksheet = data.Sheets[firstSheet];
+    var inputData = XLSX.utils.sheet_to_json (worksheet);
   
-    fs.writeFileSync (outputFile, outData, 'binary');
+    log('Reading template from: ' + templatePath);
+    var templateWorkBook = XLSX.readFile(templatePath);
+    var firstTemplateSheet = templateWorkBook.SheetNames[0];
+
+    var templateData = fs.readFileSync (templatePath);
+    log('Template read');
+    
+    for (var idx = 0; idx < inputData.length; idx++) {
+      log('Substituting data: ' + JSON.stringify(inputData[idx]));
+      
+      var template = new XlsxTemplate(templateData);
+      template.substitute(firstTemplateSheet, inputData[idx]);
+  
+      log('Generating output from template');
+      var outData = template.generate();
+      
+      var outputFile = path.join(outputPath, idx.toString() + ".xlsx");
+      log('Writing file: ' + outputFile);
+    
+      fs.writeFileSync (outputFile, outData, 'binary');
+    }
+  }
+  catch (ex) {
+    log(ex);
   }
 })
