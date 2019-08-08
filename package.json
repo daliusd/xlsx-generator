@@ -19,14 +19,14 @@
   "author": "Dalius Dobravolskas",
   "license": "MIT",
   "dependencies": {
-    "capitalize": "^1.0.0",
+    "capitalize": "^2.0.0",
     "electron-store": "*",
     "xlsx": "*",
     "xlsx-template": "*"
   },
   "devDependencies": {
-    "electron": "~1.7.8",
-    "electron-builder": "^19.42.1"
+    "electron": "~6.0.1",
+    "electron-builder": "^21.2.0"
   },
   "build": {
     "appId": "lt.ffff.xlsxgenerator"
