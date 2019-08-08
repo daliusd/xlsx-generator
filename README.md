@@ -41,7 +41,7 @@ The easiest way to build distributable executable for your OS is to run:
 npm run dist
 ```
 
-If you have different reads refer to Electron documentation.
+If you have different needs refer to Electron documentation.
 
 ## License
 
